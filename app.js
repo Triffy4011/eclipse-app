@@ -7,7 +7,36 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 console.log("Supabase connected");
 
-// Check if user is logged in
-supabase.auth.getUser().then(({ data }) => {
-  console.log("Current user:", data.user);
-});
+// Elements
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const message = document.getElementById("message");
+
+// Login
+document.getElementById("login-btn").onclick = async () => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: emailInput.value,
+    password: passwordInput.value
+  });
+
+  if (error) {
+    message.textContent = "Login failed: " + error.message;
+  } else {
+    message.textContent = "Logged in!";
+    window.location.href = "dashboard.html";
+  }
+};
+
+// Signup
+document.getElementById("signup-btn").onclick = async () => {
+  const { data, error } = await supabase.auth.signUp({
+    email: emailInput.value,
+    password: passwordInput.value
+  });
+
+  if (error) {
+    message.textContent = "Signup failed: " + error.message;
+  } else {
+    message.textContent = "Signup successful! Check your email.";
+  }
+};
