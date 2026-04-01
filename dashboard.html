@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Eclipse 3.0 — Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+    <h1>Your Eclipse Dashboard</h1>
+    <p id="user-info">Loading user...</p>
+
+    <button id="logout-btn">Log Out</button>
+
+    <script type="module">
+      import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+      const supabase = createClient('https://ddeylykymqsmfsarvbmr.supabase.co', 'sb_publishable_6-L62ClAnDz9vZvC1-RZQg_hDbi4Jd5');
+
+      const userInfo = document.getElementById("user-info");
+
+      const { data } = await supabase.auth.getUser();
+
+      if (!data.user) {
+        window.location.href = "index.html";
+      } else {
+        userInfo.textContent = "Logged in as: " + data.user.email;
+      }
+
+      document.getElementById("logout-btn").onclick = async () => {
+        await supabase.auth.signOut();
+        window.location.href = "index.html";
+      };
+    </script>
+
+  </body>
+</html>
